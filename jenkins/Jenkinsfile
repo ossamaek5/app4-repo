@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('deploy') {
+            steps {
+                sh '''
+                  kubectl get namespace app4 || kubectl create namespace app4
+                  kubectl -n app4 apply -f k8s/app4.yaml
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'app4 deploy completato con successo'
+        }
+        failure {
+            echo 'Errore nel deploy app4'
+        }
+    }
+}
