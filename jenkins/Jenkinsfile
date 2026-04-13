@@ -1,3 +1,4 @@
+@Library('shared-library@main') _
 pipeline {
     agent any
 
@@ -5,10 +6,10 @@ pipeline {
 
         stage('deploy') {
             steps {
-                sh '''
-                  kubectl get namespace app4 || kubectl create namespace app4
-                  kubectl -n app4 apply -f k8s/app4.yaml
-                '''
+                script{
+                    def config=[namespace:"app4",yaml:"k8s/app4.yaml"]
+                    deployApp(config)
+              }
             }
         }
     }
